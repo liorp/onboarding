@@ -25,6 +25,12 @@ sync_desktop_and_documents_to_icloud() {
     killall Finder >/dev/null 2>&1 || true
 }
 
+show_hidden_files_in_finder() {
+    echo "Showing hidden files by default in Finder..."
+    defaults write com.apple.finder AppleShowAllFiles -bool true
+    killall Finder >/dev/null 2>&1 || true
+}
+
 enable_auto_hide_dock() {
     echo "Enabling Dock auto-hide..."
     defaults write com.apple.dock autohide -bool true
@@ -77,6 +83,7 @@ apply_macos_settings() {
     enable_tap_to_click
     enable_trackpad_app_expose
     sync_desktop_and_documents_to_icloud
+    show_hidden_files_in_finder
     enable_auto_hide_dock
     increase_cursor_size
     configure_keyboard_shortcuts

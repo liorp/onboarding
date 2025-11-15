@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# List of applications to install via Homebrew Cask
-apps=(
+# List of GUI applications to install via Homebrew Cask
+cask_apps=(
     brave-browser
     cursor
     codex
@@ -19,20 +19,32 @@ apps=(
     iterm2
     tmux
     maccy
-    vim 
-    node 
-    jq 
-    awscli 
-    kubectl 
-    krew 
-    sops 
-    fzf 
-    starship 
-    helm
 )
 
-# Install applications
-for app in "${apps[@]}"; do
+# List of CLI tools to install via regular Homebrew formulae
+brew_formulas=(
+    vim
+    node
+    jq
+    awscli
+    kubectl
+    krew
+    sops
+    fzf
+    starship
+    helm
+    gh
+    glab
+)
+
+# Install GUI applications
+for app in "${cask_apps[@]}"; do
     echo "Installing $app..."
-    brew install --cask $app
-done 
+    brew install --cask "$app"
+done
+
+# Install CLI tools
+for formula in "${brew_formulas[@]}"; do
+    echo "Installing $formula..."
+    brew install "$formula"
+done

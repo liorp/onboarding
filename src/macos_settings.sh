@@ -43,6 +43,11 @@ increase_cursor_size() {
     defaults write NSGlobalDomain com.apple.cursor.size -float "$cursor_size"
 }
 
+require_fn_for_function_keys() {
+    echo "Configuring function keys to require the Fn modifier..."
+    defaults write NSGlobalDomain com.apple.keyboard.fnState -bool false
+}
+
 ensure_symbolic_hotkeys_plist() {
     if [ ! -f "$SYMBOLIC_HOTKEYS_PLIST" ]; then
         defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict
@@ -86,6 +91,7 @@ apply_macos_settings() {
     show_hidden_files_in_finder
     enable_auto_hide_dock
     increase_cursor_size
+    require_fn_for_function_keys
     configure_keyboard_shortcuts
     echo "macOS settings applied. A logout/login may be required for some changes."
 }

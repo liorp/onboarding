@@ -20,6 +20,10 @@ install_apps() {
         tmux
         maccy
         chatgpt
+        google-chrome
+        heynote
+        fork
+        linear-linear
     )
 
     local -a brew_formulas=(

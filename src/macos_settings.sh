@@ -37,6 +37,12 @@ enable_auto_hide_dock() {
     killall Dock >/dev/null 2>&1 || true
 }
 
+disable_spaces_auto_rearrange() {
+    echo "Disabling automatic space rearrangement..."
+    defaults write com.apple.dock mru-spaces -bool false
+    killall Dock >/dev/null 2>&1 || true
+}
+
 increase_cursor_size() {
     local cursor_size=1.5
     echo "Increasing cursor size to ${cursor_size}x..."
@@ -90,6 +96,7 @@ apply_macos_settings() {
     sync_desktop_and_documents_to_icloud
     show_hidden_files_in_finder
     enable_auto_hide_dock
+    disable_spaces_auto_rearrange
     increase_cursor_size
     require_fn_for_function_keys
     configure_keyboard_shortcuts

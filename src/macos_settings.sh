@@ -11,6 +11,13 @@ enable_tap_to_click() {
     defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 }
 
+enable_trackpad_app_expose() {
+    echo "Ensuring App Exposé gesture is enabled on trackpads..."
+    defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerVertSwipeGesture -int 2
+    defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerVertSwipeGesture -int 2
+    defaults -currentHost write NSGlobalDomain com.apple.trackpad.threeFingerVertSwipeGesture -int 2
+}
+
 sync_desktop_and_documents_to_icloud() {
     echo "Syncing Desktop and Documents with iCloud Drive..."
     defaults write com.apple.finder FXICloudDriveDesktop -bool true
@@ -68,6 +75,7 @@ configure_keyboard_shortcuts() {
 apply_macos_settings() {
     echo "Applying macOS system settings..."
     enable_tap_to_click
+    enable_trackpad_app_expose
     sync_desktop_and_documents_to_icloud
     enable_auto_hide_dock
     increase_cursor_size

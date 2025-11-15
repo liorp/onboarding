@@ -15,6 +15,7 @@ usage() {
     echo "Options:"
     echo "  -a, --all           Run all configurations (default)"
     echo "  -o, --omz           Run Oh My Zsh setup"
+    echo "  -n, --nvm           Run nvm setup"
     echo "  -b, --brew          Run Homebrew setup"
     echo "  -p, --apps          Run applications installation"
     echo "  -f, --fzf           Run fzf setup"
@@ -55,13 +56,14 @@ else
 fi
 
 # Parse command line arguments
-while getopts "abcfkmopstvwyh-:" opt; do
+while getopts "abcfkmnopstvwyh-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
                 all) RUN_ALL=true ;;
                 omz) source "$SCRIPT_DIR/omz.sh" ;;
                 brew) source "$SCRIPT_DIR/homebrew.sh" ;;
+                nvm) source "$SCRIPT_DIR/nvm.sh" ;;
                 apps) source "$SCRIPT_DIR/apps.sh" ;;
                 fzf) source "$SCRIPT_DIR/fzf.sh" ;;
                 kubectl) source "$SCRIPT_DIR/kubectl.sh" ;;
@@ -75,6 +77,7 @@ while getopts "abcfkmopstvwyh-:" opt; do
             esac ;;
         a) RUN_ALL=true ;;
         o) source "$SCRIPT_DIR/omz.sh" ;;
+        n) source "$SCRIPT_DIR/nvm.sh" ;;
         b) source "$SCRIPT_DIR/homebrew.sh" ;;
         p) source "$SCRIPT_DIR/apps.sh" ;;
         f) source "$SCRIPT_DIR/fzf.sh" ;;
@@ -93,6 +96,7 @@ done
 if [ "$RUN_ALL" = true ]; then
     echo "Running all configurations..."
     source "$SCRIPT_DIR/omz.sh"
+    source "$SCRIPT_DIR/nvm.sh"
     source "$SCRIPT_DIR/homebrew.sh"
     source "$SCRIPT_DIR/apps.sh"
     source "$SCRIPT_DIR/fzf.sh"

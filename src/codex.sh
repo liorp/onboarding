@@ -1,11 +1,15 @@
 #!/bin/bash
 
-echo "Configuring Codex..."
+configure_codex() {
+    echo "Configuring Codex..."
 
-# Directory containing this script and the Codex config
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-CODEX_CONFIG_SOURCE="$SCRIPT_DIR/codex/config.toml"
-CODEX_CONFIG_TARGET_DIR="$HOME/.config/codex"
+    local script_dir
+    script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    local config_source="$script_dir/codex/config.toml"
+    local config_target_dir="$HOME/.config/codex"
 
-mkdir -p "$CODEX_CONFIG_TARGET_DIR"
-cp "$CODEX_CONFIG_SOURCE" "$CODEX_CONFIG_TARGET_DIR/config.toml"
+    mkdir -p "$config_target_dir"
+    cp "$config_source" "$config_target_dir/config.toml"
+}
+
+configure_codex

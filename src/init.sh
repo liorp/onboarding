@@ -23,9 +23,29 @@ usage() {
     echo "  -c, --codex         Run Codex config setup"
     echo "  -y, --pyenv         Run pyenv setup"
     echo "  -m, --manual        Run manual apps installation"
+    echo "  -t, --macos-settings Apply macOS system settings"
     echo "  -h, --help          Display this help message"
     exit 1
 }
+
+# Ensure macOS developer tools are installed
+ensure_macos_developer_tools() {
+    if xcode-select -p >/dev/null 2>&1; then
+        echo "macOS developer tools already installed."
+    else
+        echo "macOS developer tools not found. Installing now..."
+        if /usr/bin/xcode-select --install >/dev/null 2>&1; then
+            echo "macOS developer tools installation started."
+            echo "Complete the on-screen prompts, then re-run this script."
+        else
+            echo "Unable to start macOS developer tools installation. Please install them manually and re-run this script." >&2
+        fi
+        exit 0
+    fi
+}
+
+# Install dev tools before doing anything else
+ensure_macos_developer_tools
 
 # Default to running all if no arguments provided
 if [ $# -eq 0 ]; then
@@ -49,6 +69,7 @@ while getopts "abcfkmopstvwyh-:" opt; do
                 codex) source "$SCRIPT_DIR/codex.sh" ;;
                 pyenv) source "$SCRIPT_DIR/pyenv.sh" ;;
                 manual) source "$SCRIPT_DIR/manual_apps.sh" ;;
+                macos-settings) source "$SCRIPT_DIR/macos_settings.sh" ;;
                 help) usage ;;
                 *) echo "Invalid option: --${OPTARG}" >&2; usage ;;
             esac ;;
@@ -62,6 +83,7 @@ while getopts "abcfkmopstvwyh-:" opt; do
         c) source "$SCRIPT_DIR/codex.sh" ;;
         y) source "$SCRIPT_DIR/pyenv.sh" ;;
         m) source "$SCRIPT_DIR/manual_apps.sh" ;;
+        t) source "$SCRIPT_DIR/macos_settings.sh" ;;
         h) usage ;;
         \?) echo "Invalid option: -$OPTARG" >&2; usage ;;
     esac
@@ -79,5 +101,6 @@ if [ "$RUN_ALL" = true ]; then
     source "$SCRIPT_DIR/codex.sh"
     source "$SCRIPT_DIR/pyenv.sh"
     source "$SCRIPT_DIR/manual_apps.sh"
+    source "$SCRIPT_DIR/macos_settings.sh"
     echo "All applications installed or opened for manual installation."
 fi 

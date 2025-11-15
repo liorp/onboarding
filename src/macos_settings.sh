@@ -49,6 +49,15 @@ increase_cursor_size() {
     defaults write NSGlobalDomain com.apple.cursor.size -float "$cursor_size"
 }
 
+enable_night_shift_sunset_to_sunrise() {
+    echo "Enabling Night Shift from sunset to sunrise..."
+    defaults -currentHost write com.apple.CoreBrightness CBBlueReductionStatus -dict \
+        BlueReductionEnabled -bool true \
+        BlueReductionMode -int 1 \
+        BlueReductionSunScheduleAllowed -bool true \
+        AutoBlueReductionEnabled -bool true
+}
+
 require_fn_for_function_keys() {
     echo "Configuring function keys to require the Fn modifier..."
     defaults write NSGlobalDomain com.apple.keyboard.fnState -bool false
@@ -98,6 +107,7 @@ apply_macos_settings() {
     enable_auto_hide_dock
     disable_spaces_auto_rearrange
     increase_cursor_size
+    enable_night_shift_sunset_to_sunrise
     require_fn_for_function_keys
     configure_keyboard_shortcuts
     echo "macOS settings applied. A logout/login may be required for some changes."

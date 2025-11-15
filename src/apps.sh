@@ -42,6 +42,7 @@ install_apps() {
         glab
         bun
         ollama
+        shellcheck
         zsh-autosuggestions
         zsh-syntax-highlighting
     )

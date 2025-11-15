@@ -1,9 +1,13 @@
 #!/bin/bash
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=src/zshrc_helpers.sh
+source "$SCRIPT_DIR/zshrc_helpers.sh"
+
 install_fzf_and_prompt() {
-    echo -e "\n# Initialize Starship prompt" >> ~/.zshrc
-    echo 'eval "$(starship init zsh)"' >> ~/.zshrc
-    echo 'source <(fzf --zsh)' >> ~/.zshrc
+    append_zshrc_line "# Initialize Starship prompt" true
+    append_zshrc_line 'eval "$(starship init zsh)"'
+    append_zshrc_line 'source <(fzf --zsh)'
 }
 
 install_fzf_and_prompt

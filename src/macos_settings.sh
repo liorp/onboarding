@@ -24,6 +24,12 @@ enable_auto_hide_dock() {
     killall Dock >/dev/null 2>&1 || true
 }
 
+increase_cursor_size() {
+    local cursor_size=1.5
+    echo "Increasing cursor size to ${cursor_size}x..."
+    defaults write NSGlobalDomain com.apple.cursor.size -float "$cursor_size"
+}
+
 ensure_symbolic_hotkeys_plist() {
     if [ ! -f "$SYMBOLIC_HOTKEYS_PLIST" ]; then
         defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict
@@ -54,6 +60,9 @@ configure_keyboard_shortcuts() {
 
     echo "Setting Spotlight shortcut to Option+Space..."
     set_symbolic_hotkey 64 49 524288
+
+    echo "Setting App Exposé shortcut to Control+Down..."
+    set_symbolic_hotkey 33 125 262144 65535
 }
 
 apply_macos_settings() {
@@ -61,6 +70,7 @@ apply_macos_settings() {
     enable_tap_to_click
     sync_desktop_and_documents_to_icloud
     enable_auto_hide_dock
+    increase_cursor_size
     configure_keyboard_shortcuts
     echo "macOS settings applied. A logout/login may be required for some changes."
 }

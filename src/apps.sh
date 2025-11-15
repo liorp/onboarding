@@ -19,6 +19,7 @@ cask_apps=(
     iterm2
     tmux
     maccy
+    chatgpt
 )
 
 # List of CLI tools to install via regular Homebrew formulae
@@ -35,6 +36,7 @@ brew_formulas=(
     helm
     gh
     glab
+    bun
 )
 
 # Install GUI applications

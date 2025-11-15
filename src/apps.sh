@@ -42,6 +42,8 @@ install_apps() {
         glab
         bun
         ollama
+        zsh-autosuggestions
+        zsh-syntax-highlighting
     )
 
     # Install GUI applications

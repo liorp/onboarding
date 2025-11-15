@@ -1,20 +1,5 @@
 #!/bin/bash
 
-
-install_or_update_plugin() {
-    local repo_url="$1"
-    local dest="$2"
-
-    if [ -d "$dest/.git" ]; then
-        echo "Updating existing plugin in $dest..."
-        git -C "$dest" pull --ff-only
-    elif [ -d "$dest" ]; then
-        echo "Directory $dest exists but is not a git repo. Skipping clone to avoid overwriting."
-    else
-        git clone "$repo_url" "$dest"
-    fi
-}
-
 install_omz_and_plugins() {
     local omz_dir="$HOME/.oh-my-zsh"
     local zshrc="$HOME/.zshrc"
@@ -28,10 +13,8 @@ install_omz_and_plugins() {
         RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     fi
 
-    mkdir -p "$custom_dir/plugins"
-    
-    install_or_update_plugin "https://github.com/zsh-users/zsh-autosuggestions" "$custom_dir/plugins/zsh-autosuggestions"
-    install_or_update_plugin "https://github.com/zsh-users/zsh-syntax-highlighting.git" "$custom_dir/plugins/zsh-syntax-highlighting"
+    echo "source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
+    echo "source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
 
     if [ -f "$zshrc" ]; then
         if grep -q '^plugins=(' "$zshrc"; then

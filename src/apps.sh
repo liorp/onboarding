@@ -24,6 +24,7 @@ install_apps() {
         heynote
         fork
         linear-linear
+        chatgpt-atlas
     )
 
     local -a brew_formulas=(

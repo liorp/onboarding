@@ -11,6 +11,19 @@ enable_tap_to_click() {
     defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 }
 
+sync_desktop_and_documents_to_icloud() {
+    echo "Syncing Desktop and Documents with iCloud Drive..."
+    defaults write com.apple.finder FXICloudDriveDesktop -bool true
+    defaults write com.apple.finder FXICloudDriveDocuments -bool true
+    killall Finder >/dev/null 2>&1 || true
+}
+
+enable_auto_hide_dock() {
+    echo "Enabling Dock auto-hide..."
+    defaults write com.apple.dock autohide -bool true
+    killall Dock >/dev/null 2>&1 || true
+}
+
 ensure_symbolic_hotkeys_plist() {
     if [ ! -f "$SYMBOLIC_HOTKEYS_PLIST" ]; then
         defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict
@@ -46,6 +59,8 @@ configure_keyboard_shortcuts() {
 apply_macos_settings() {
     echo "Applying macOS system settings..."
     enable_tap_to_click
+    sync_desktop_and_documents_to_icloud
+    enable_auto_hide_dock
     configure_keyboard_shortcuts
     echo "macOS settings applied. A logout/login may be required for some changes."
 }

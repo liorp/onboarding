@@ -1,9 +1,22 @@
 #!/bin/bash
+# shellcheck disable=SC1091
 
 # MacBook Setup
 
 # Source all initialization scripts
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=src/omz.sh
+# shellcheck source=src/nvm.sh
+# shellcheck source=src/homebrew.sh
+# shellcheck source=src/apps.sh
+# shellcheck source=src/fzf.sh
+# shellcheck source=src/kubectl.sh
+# shellcheck source=src/starship.sh
+# shellcheck source=src/codex.sh
+# shellcheck source=src/projects.sh
+# shellcheck source=src/pyenv.sh
+# shellcheck source=src/manual_apps.sh
+# shellcheck source=src/macos_settings.sh
 
 # Make all scripts executable
 echo "Making all scripts executable..."
@@ -22,6 +35,7 @@ usage() {
     echo "  -k, --kubectl       Run kubectl setup"
     echo "  -s, --starship      Run starship setup"
     echo "  -c, --codex         Run Codex config setup"
+    echo "  -r, --projects      Create projects directory in home"
     echo "  -y, --pyenv         Run pyenv setup"
     echo "  -m, --manual        Run manual apps installation"
     echo "  -t, --macos-settings Apply macOS system settings"
@@ -56,19 +70,20 @@ else
 fi
 
 # Parse command line arguments
-while getopts "abcfkmnopstvwyh-:" opt; do
+while getopts "aonbpfkscrymth-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
                 all) RUN_ALL=true ;;
                 omz) source "$SCRIPT_DIR/omz.sh" ;;
-                brew) source "$SCRIPT_DIR/homebrew.sh" ;;
                 nvm) source "$SCRIPT_DIR/nvm.sh" ;;
+                brew) source "$SCRIPT_DIR/homebrew.sh" ;;
                 apps) source "$SCRIPT_DIR/apps.sh" ;;
                 fzf) source "$SCRIPT_DIR/fzf.sh" ;;
                 kubectl) source "$SCRIPT_DIR/kubectl.sh" ;;
                 starship) source "$SCRIPT_DIR/starship.sh" ;;
                 codex) source "$SCRIPT_DIR/codex.sh" ;;
+                projects) source "$SCRIPT_DIR/projects.sh" ;;
                 pyenv) source "$SCRIPT_DIR/pyenv.sh" ;;
                 manual) source "$SCRIPT_DIR/manual_apps.sh" ;;
                 macos-settings) source "$SCRIPT_DIR/macos_settings.sh" ;;
@@ -84,6 +99,7 @@ while getopts "abcfkmnopstvwyh-:" opt; do
         k) source "$SCRIPT_DIR/kubectl.sh" ;;
         s) source "$SCRIPT_DIR/starship.sh" ;;
         c) source "$SCRIPT_DIR/codex.sh" ;;
+        r) source "$SCRIPT_DIR/projects.sh" ;;
         y) source "$SCRIPT_DIR/pyenv.sh" ;;
         m) source "$SCRIPT_DIR/manual_apps.sh" ;;
         t) source "$SCRIPT_DIR/macos_settings.sh" ;;
@@ -103,6 +119,7 @@ if [ "$RUN_ALL" = true ]; then
     source "$SCRIPT_DIR/kubectl.sh"
     source "$SCRIPT_DIR/starship.sh"
     source "$SCRIPT_DIR/codex.sh"
+    source "$SCRIPT_DIR/projects.sh"
     source "$SCRIPT_DIR/pyenv.sh"
     source "$SCRIPT_DIR/manual_apps.sh"
     source "$SCRIPT_DIR/macos_settings.sh"

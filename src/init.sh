@@ -17,6 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=src/pyenv.sh
 # shellcheck source=src/manual_apps.sh
 # shellcheck source=src/macos_settings.sh
+# shellcheck source=src/vscode.sh
 
 # Make all scripts executable
 echo "Making all scripts executable..."
@@ -38,6 +39,7 @@ usage() {
     echo "  -r, --projects      Create projects directory in home"
     echo "  -y, --pyenv         Run pyenv setup"
     echo "  -m, --manual        Run manual apps installation"
+    echo "  -v, --vscode        Configure VS Code settings"
     echo "  -t, --macos-settings Apply macOS system settings"
     echo "  -h, --help          Display this help message"
     exit 1
@@ -70,7 +72,7 @@ else
 fi
 
 # Parse command line arguments
-while getopts "aonbpfkscrymth-:" opt; do
+while getopts "aonbpfkscrvymth-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -86,6 +88,7 @@ while getopts "aonbpfkscrymth-:" opt; do
                 projects) source "$SCRIPT_DIR/projects.sh" ;;
                 pyenv) source "$SCRIPT_DIR/pyenv.sh" ;;
                 manual) source "$SCRIPT_DIR/manual_apps.sh" ;;
+                vscode) source "$SCRIPT_DIR/vscode.sh" ;;
                 macos-settings) source "$SCRIPT_DIR/macos_settings.sh" ;;
                 help) usage ;;
                 *) echo "Invalid option: --${OPTARG}" >&2; usage ;;
@@ -102,6 +105,7 @@ while getopts "aonbpfkscrymth-:" opt; do
         r) source "$SCRIPT_DIR/projects.sh" ;;
         y) source "$SCRIPT_DIR/pyenv.sh" ;;
         m) source "$SCRIPT_DIR/manual_apps.sh" ;;
+        v) source "$SCRIPT_DIR/vscode.sh" ;;
         t) source "$SCRIPT_DIR/macos_settings.sh" ;;
         h) usage ;;
         \?) echo "Invalid option: -$OPTARG" >&2; usage ;;
@@ -122,6 +126,7 @@ if [ "$RUN_ALL" = true ]; then
     source "$SCRIPT_DIR/projects.sh"
     source "$SCRIPT_DIR/pyenv.sh"
     source "$SCRIPT_DIR/manual_apps.sh"
+    source "$SCRIPT_DIR/vscode.sh"
     source "$SCRIPT_DIR/macos_settings.sh"
     echo "All applications installed or opened for manual installation."
 fi 

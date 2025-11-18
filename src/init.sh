@@ -8,6 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=src/omz.sh
 # shellcheck source=src/nvm.sh
 # shellcheck source=src/homebrew.sh
+# shellcheck source=src/bun.sh
 # shellcheck source=src/apps.sh
 # shellcheck source=src/fzf.sh
 # shellcheck source=src/kubectl.sh
@@ -30,6 +31,7 @@ usage() {
     echo "  -a, --all           Run all configurations (default)"
     echo "  -o, --omz           Run Oh My Zsh setup"
     echo "  -n, --nvm           Run nvm setup"
+    echo "  -u, --bun           Run Bun setup"
     echo "  -b, --brew          Run Homebrew setup"
     echo "  -p, --apps          Run applications installation"
     echo "  -f, --fzf           Run fzf setup"
@@ -72,13 +74,14 @@ else
 fi
 
 # Parse command line arguments
-while getopts "aonbpfkscrvymth-:" opt; do
+while getopts "aonubpfkscrvymth-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
                 all) RUN_ALL=true ;;
                 omz) source "$SCRIPT_DIR/omz.sh" ;;
                 nvm) source "$SCRIPT_DIR/nvm.sh" ;;
+                bun) source "$SCRIPT_DIR/bun.sh" ;;
                 brew) source "$SCRIPT_DIR/homebrew.sh" ;;
                 apps) source "$SCRIPT_DIR/apps.sh" ;;
                 fzf) source "$SCRIPT_DIR/fzf.sh" ;;
@@ -96,6 +99,7 @@ while getopts "aonbpfkscrvymth-:" opt; do
         a) RUN_ALL=true ;;
         o) source "$SCRIPT_DIR/omz.sh" ;;
         n) source "$SCRIPT_DIR/nvm.sh" ;;
+        u) source "$SCRIPT_DIR/bun.sh" ;;
         b) source "$SCRIPT_DIR/homebrew.sh" ;;
         p) source "$SCRIPT_DIR/apps.sh" ;;
         f) source "$SCRIPT_DIR/fzf.sh" ;;
@@ -117,6 +121,7 @@ if [ "$RUN_ALL" = true ]; then
     echo "Running all configurations..."
     source "$SCRIPT_DIR/omz.sh"
     source "$SCRIPT_DIR/nvm.sh"
+    source "$SCRIPT_DIR/bun.sh"
     source "$SCRIPT_DIR/homebrew.sh"
     source "$SCRIPT_DIR/apps.sh"
     source "$SCRIPT_DIR/fzf.sh"

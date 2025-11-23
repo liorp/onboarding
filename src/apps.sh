@@ -25,6 +25,7 @@ install_apps() {
         fork
         linear-linear
         chatgpt-atlas
+        vlc
     )
 
     local -a brew_formulas=(

@@ -46,6 +46,7 @@ install_apps() {
         shellcheck
         zsh-autosuggestions
         zsh-syntax-highlighting
+        uv
     )
 
     # Install GUI applications

@@ -27,6 +27,7 @@ install_apps() {
         chatgpt-atlas
         vlc
         slack
+        zoom
     )
 
     local -a brew_formulas=(

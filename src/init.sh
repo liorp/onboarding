@@ -19,6 +19,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=src/manual_apps.sh
 # shellcheck source=src/macos_settings.sh
 # shellcheck source=src/vscode.sh
+# shellcheck source=src/uv.sh
 
 # Make all scripts executable
 echo "Making all scripts executable..."
@@ -42,6 +43,7 @@ usage() {
     echo "  -y, --pyenv         Run pyenv setup"
     echo "  -m, --manual        Run manual apps installation"
     echo "  -v, --vscode        Configure VS Code settings"
+    echo "  -U, --uv            Run uv setup"
     echo "  -t, --macos-settings Apply macOS system settings"
     echo "  -h, --help          Display this help message"
     exit 1
@@ -74,7 +76,7 @@ else
 fi
 
 # Parse command line arguments
-while getopts "aonubpfkscrvymth-:" opt; do
+while getopts "aonubpfkscrvyUmth-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -92,6 +94,7 @@ while getopts "aonubpfkscrvymth-:" opt; do
                 pyenv) source "$SCRIPT_DIR/pyenv.sh" ;;
                 manual) source "$SCRIPT_DIR/manual_apps.sh" ;;
                 vscode) source "$SCRIPT_DIR/vscode.sh" ;;
+                uv) source "$SCRIPT_DIR/uv.sh" ;;
                 macos-settings) source "$SCRIPT_DIR/macos_settings.sh" ;;
                 help) usage ;;
                 *) echo "Invalid option: --${OPTARG}" >&2; usage ;;
@@ -110,6 +113,7 @@ while getopts "aonubpfkscrvymth-:" opt; do
         y) source "$SCRIPT_DIR/pyenv.sh" ;;
         m) source "$SCRIPT_DIR/manual_apps.sh" ;;
         v) source "$SCRIPT_DIR/vscode.sh" ;;
+        U) source "$SCRIPT_DIR/uv.sh" ;;
         t) source "$SCRIPT_DIR/macos_settings.sh" ;;
         h) usage ;;
         \?) echo "Invalid option: -$OPTARG" >&2; usage ;;
@@ -124,6 +128,7 @@ if [ "$RUN_ALL" = true ]; then
     source "$SCRIPT_DIR/bun.sh"
     source "$SCRIPT_DIR/homebrew.sh"
     source "$SCRIPT_DIR/apps.sh"
+    source "$SCRIPT_DIR/uv.sh"
     source "$SCRIPT_DIR/fzf.sh"
     source "$SCRIPT_DIR/kubectl.sh"
     source "$SCRIPT_DIR/starship.sh"

@@ -26,6 +26,7 @@ install_apps() {
         linear-linear
         chatgpt-atlas
         vlc
+        slack
     )
 
     local -a brew_formulas=(

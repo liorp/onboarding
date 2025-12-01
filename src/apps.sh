@@ -28,6 +28,7 @@ install_apps() {
         vlc
         slack
         zoom
+        karabiner-elements
     )
 
     local -a brew_formulas=(

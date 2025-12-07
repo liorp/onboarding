@@ -29,6 +29,7 @@ install_apps() {
         slack
         zoom
         karabiner-elements
+        notion
     )
 
     local -a brew_formulas=(

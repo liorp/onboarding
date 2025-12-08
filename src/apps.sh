@@ -51,6 +51,7 @@ install_apps() {
         zsh-autosuggestions
         zsh-syntax-highlighting
         uv
+        pnpm
     )
 
     # Install GUI applications

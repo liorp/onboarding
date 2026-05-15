@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install shellcheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Syntax check
+        run: |
+          set -e
+          for f in main.sh build.sh src/*.sh; do
+              bash -n "$f"
+          done
+
+      - name: Shellcheck
+        run: shellcheck main.sh build.sh src/*.sh
+
+  build:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install makeself
+        run: sudo apt-get update && sudo apt-get install -y makeself
+
+      - name: Build dev artifact
+        run: bash build.sh "dev-${GITHUB_SHA::7}"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: onboarding-dev
+          path: dist/onboarding-*.run
+          retention-days: 14

@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install makeself
+        run: sudo apt-get update && sudo apt-get install -y makeself
+
+      - name: Build versioned artifact
+        run: bash build.sh "${GITHUB_REF_NAME}"
+
+      - name: Generate checksum
+        working-directory: dist
+        run: sha256sum "onboarding-${GITHUB_REF_NAME}.run" > "onboarding-${GITHUB_REF_NAME}.run.sha256"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          files: |
+            dist/onboarding-*.run
+            dist/onboarding-*.sha256
+          generate_release_notes: true
+          fail_on_unmatched_files: true

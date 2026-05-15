@@ -7,7 +7,6 @@ source "$SCRIPT_DIR/zshrc_helpers.sh"
 install_omz_and_plugins() {
     local omz_dir="$HOME/.oh-my-zsh"
     local zshrc="${ZDOTDIR:-$HOME}/.zshrc"
-    local custom_dir="${ZSH_CUSTOM:-$omz_dir/custom}"
     local plugin_line="plugins=(kubectl zsh-autosuggestions zsh-syntax-highlighting)"
 
     echo "Installing Oh My Zsh..."
@@ -17,8 +16,10 @@ install_omz_and_plugins() {
         RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     fi
 
-    local syntax_highlighting="source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-    local autosuggestions="source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    local brew_prefix
+    brew_prefix="$(brew --prefix)"
+    local syntax_highlighting="source $brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    local autosuggestions="source $brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
     append_zshrc_line "$syntax_highlighting"
     append_zshrc_line "$autosuggestions"
 

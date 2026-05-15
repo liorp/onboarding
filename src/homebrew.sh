@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2016  # single-quoted strings are written verbatim into .zshrc for later expansion
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=src/zshrc_helpers.sh

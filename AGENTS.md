@@ -3,10 +3,14 @@
 ## Project Structure & Module Organization
 All automation lives in `src/`. `init.sh` is the entry point: it marks scripts executable, ensures Xcode CLT is present, and sources task-specific modules such as `homebrew.sh`, `apps.sh`, `kubectl.sh`, and `macos_settings.sh`. Supporting installers (for Oh My Zsh, nvm, pyenv, etc.) sit alongside the orchestrator, and `starship.toml` contains the prompt configuration that the `starship.sh` script deploys. Keep new modules self-contained under `src/` and expose them through `init.sh` so they can be run either individually or via the `--all` flag.
 
+## First-Time Setup
+
+Run `make` from the repo root. Every target is idempotent — safe to re-run. If Xcode CLI tools are missing, the `xcode` target triggers the macOS installer GUI and exits; re-run `make` after the prompt completes. Targets that open URLs (`manual-apps`) or restart system processes (`macos-settings`) may need user interaction.
+
 ## Build, Test, and Development Commands
-- `bash src/init.sh --help` — list all available setup targets and flags before running anything destructive.
-- `bash src/init.sh -a` — execute the full onboarding flow (preferred path for regression testing).
-- `bash src/init.sh --brew` or any other long-form flag — source a single module to speed up iterative development.
+- `make` or `make all` — execute the full onboarding flow.
+- `make <target>` — run any individual step (e.g., `make brew`, `make nvm`). Run `make help` for the full list.
+- `make clean` — remove sentinel files to force re-run.
 - `shellcheck src/*.sh` — lint all shell scripts locally; treat warnings as failing tests.
 
 ## Coding Style & Naming Conventions

@@ -14,26 +14,25 @@ install_apps() {
         firefox
         obsidian
         chatgpt
-        docker
         rectangle-pro
         iterm2
-        tmux
         maccy
-        chatgpt
         google-chrome
         heynote
         fork
         linear-linear
         chatgpt-atlas
         vlc
-        slack
         zoom
         karabiner-elements
         notion
+        whatsapp
+        yazinsai/openoats/openoats
     )
 
     local -a brew_formulas=(
         vim
+        tmux
         node
         jq
         awscli
@@ -45,7 +44,6 @@ install_apps() {
         helm
         gh
         glab
-        bun
         ollama
         shellcheck
         zsh-autosuggestions

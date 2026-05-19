@@ -18,10 +18,10 @@ DONE        := .done
 SRC         := src
 
 # ─── Phony targets ───────────────────────────────────────────────────
-.PHONY: all clean help xcode brew apps omz nvm bun uv pyenv fzf \
+.PHONY: all clean help xcode brew apps omz nvm uv pyenv fzf \
         kubectl starship codex projects vscode manual-apps macos-settings
 
-all: xcode brew apps omz nvm bun uv pyenv fzf kubectl starship codex \
+all: xcode brew apps omz nvm uv pyenv fzf kubectl starship codex \
      projects vscode manual-apps macos-settings
 	@echo ""
 	@echo "All onboarding steps complete."
@@ -35,7 +35,6 @@ help:
 	@echo "  apps            Install cask & formula apps via Homebrew"
 	@echo "  omz             Install Oh My Zsh + plugins"
 	@echo "  nvm             Install nvm + Node LTS"
-	@echo "  bun             Install Bun runtime"
 	@echo "  uv              Install uv (Python package manager)"
 	@echo "  pyenv           Install pyenv"
 	@echo "  fzf             Configure fzf + starship shell init"
@@ -74,10 +73,6 @@ omz: brew apps | $(DONE)
 
 nvm: | $(DONE)
 	@bash $(SRC)/nvm.sh
-	@touch $(DONE)/$@
-
-bun: brew | $(DONE)
-	@bash $(SRC)/bun.sh
 	@touch $(DONE)/$@
 
 uv: brew | $(DONE)

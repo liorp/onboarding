@@ -52,6 +52,7 @@ install_apps() {
         uv
         pnpm
         pulumi/tap/pulumi
+        oven-sh/bun/bun
     )
 
     if ! command -v brew >/dev/null 2>&1; then

@@ -5,6 +5,7 @@ install_apps() {
         brave-browser
         cursor
         codex
+        claude-code@latest
         figma
         slack
         postman
@@ -50,16 +51,31 @@ install_apps() {
         zsh-syntax-highlighting
         uv
         pnpm
+        pulumi/tap/pulumi
+        oven-sh/bun/bun
     )
+
+    if ! command -v brew >/dev/null 2>&1; then
+        echo "Homebrew is required to install apps. Run the brew step first." >&2
+        return 1
+    fi
 
     # Install GUI applications
     for app in "${cask_apps[@]}"; do
+        if brew list --cask "${app##*/}" >/dev/null 2>&1; then
+            echo "$app already installed. Skipping."
+            continue
+        fi
         echo "Installing $app..."
         brew install --cask "$app"
     done
 
     # Install CLI tools
     for formula in "${brew_formulas[@]}"; do
+        if brew list --formula "${formula##*/}" >/dev/null 2>&1; then
+            echo "$formula already installed. Skipping."
+            continue
+        fi
         echo "Installing $formula..."
         brew install "$formula"
     done

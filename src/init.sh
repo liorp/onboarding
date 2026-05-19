@@ -8,7 +8,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=src/omz.sh
 # shellcheck source=src/nvm.sh
 # shellcheck source=src/homebrew.sh
-# shellcheck source=src/bun.sh
 # shellcheck source=src/apps.sh
 # shellcheck source=src/fzf.sh
 # shellcheck source=src/kubectl.sh
@@ -32,7 +31,6 @@ usage() {
     echo "  -a, --all           Run all configurations (default)"
     echo "  -o, --omz           Run Oh My Zsh setup"
     echo "  -n, --nvm           Run nvm setup"
-    echo "  -u, --bun           Run Bun setup"
     echo "  -b, --brew          Run Homebrew setup"
     echo "  -p, --apps          Run applications installation"
     echo "  -f, --fzf           Run fzf setup"
@@ -49,24 +47,8 @@ usage() {
     exit 1
 }
 
-# Ensure macOS developer tools are installed
-ensure_macos_developer_tools() {
-    if xcode-select -p >/dev/null 2>&1; then
-        echo "macOS developer tools already installed."
-    else
-        echo "macOS developer tools not found. Installing now..."
-        if /usr/bin/xcode-select --install >/dev/null 2>&1; then
-            echo "macOS developer tools installation started."
-            echo "Complete the on-screen prompts, then re-run this script."
-        else
-            echo "Unable to start macOS developer tools installation. Please install them manually and re-run this script." >&2
-        fi
-        exit 0
-    fi
-}
-
 # Install dev tools before doing anything else
-ensure_macos_developer_tools
+source "$SCRIPT_DIR/xcode.sh"
 
 # Default to running all if no arguments provided
 if [ $# -eq 0 ]; then
@@ -76,14 +58,13 @@ else
 fi
 
 # Parse command line arguments
-while getopts "aonubpfkscrvyUmth-:" opt; do
+while getopts "aonbpfkscrvyUmth-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
                 all) RUN_ALL=true ;;
                 omz) source "$SCRIPT_DIR/omz.sh" ;;
                 nvm) source "$SCRIPT_DIR/nvm.sh" ;;
-                bun) source "$SCRIPT_DIR/bun.sh" ;;
                 brew) source "$SCRIPT_DIR/homebrew.sh" ;;
                 apps) source "$SCRIPT_DIR/apps.sh" ;;
                 fzf) source "$SCRIPT_DIR/fzf.sh" ;;
@@ -102,7 +83,6 @@ while getopts "aonubpfkscrvyUmth-:" opt; do
         a) RUN_ALL=true ;;
         o) source "$SCRIPT_DIR/omz.sh" ;;
         n) source "$SCRIPT_DIR/nvm.sh" ;;
-        u) source "$SCRIPT_DIR/bun.sh" ;;
         b) source "$SCRIPT_DIR/homebrew.sh" ;;
         p) source "$SCRIPT_DIR/apps.sh" ;;
         f) source "$SCRIPT_DIR/fzf.sh" ;;
@@ -123,11 +103,10 @@ done
 # Run all configurations if specified
 if [ "$RUN_ALL" = true ]; then
     echo "Running all configurations..."
-    source "$SCRIPT_DIR/omz.sh"
-    source "$SCRIPT_DIR/nvm.sh"
-    source "$SCRIPT_DIR/bun.sh"
     source "$SCRIPT_DIR/homebrew.sh"
     source "$SCRIPT_DIR/apps.sh"
+    source "$SCRIPT_DIR/omz.sh"
+    source "$SCRIPT_DIR/nvm.sh"
     source "$SCRIPT_DIR/uv.sh"
     source "$SCRIPT_DIR/fzf.sh"
     source "$SCRIPT_DIR/kubectl.sh"

@@ -49,24 +49,8 @@ usage() {
     exit 1
 }
 
-# Ensure macOS developer tools are installed
-ensure_macos_developer_tools() {
-    if xcode-select -p >/dev/null 2>&1; then
-        echo "macOS developer tools already installed."
-    else
-        echo "macOS developer tools not found. Installing now..."
-        if /usr/bin/xcode-select --install >/dev/null 2>&1; then
-            echo "macOS developer tools installation started."
-            echo "Complete the on-screen prompts, then re-run this script."
-        else
-            echo "Unable to start macOS developer tools installation. Please install them manually and re-run this script." >&2
-        fi
-        exit 0
-    fi
-}
-
 # Install dev tools before doing anything else
-ensure_macos_developer_tools
+source "$SCRIPT_DIR/xcode.sh"
 
 # Default to running all if no arguments provided
 if [ $# -eq 0 ]; then

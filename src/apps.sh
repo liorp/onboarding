@@ -4,7 +4,6 @@ install_apps() {
     local -a cask_apps=(
         brave-browser
         cursor
-        codex
         figma
         slack
         postman

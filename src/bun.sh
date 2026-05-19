@@ -10,8 +10,14 @@ install_bun() {
         return 0
     fi
 
-    echo "Installing Bun..."
-    curl -fsSL https://bun.sh/install | bash
+    if ! command -v brew >/dev/null 2>&1; then
+        echo "Homebrew is required to install Bun. Run the brew step first." >&2
+        return 1
+    fi
+
+    echo "Installing Bun via Homebrew (oven-sh/bun)..."
+    brew tap oven-sh/bun
+    brew install bun
 }
 
 configure_bun_path() {

@@ -123,11 +123,11 @@ done
 # Run all configurations if specified
 if [ "$RUN_ALL" = true ]; then
     echo "Running all configurations..."
+    source "$SCRIPT_DIR/homebrew.sh"
+    source "$SCRIPT_DIR/apps.sh"
     source "$SCRIPT_DIR/omz.sh"
     source "$SCRIPT_DIR/nvm.sh"
     source "$SCRIPT_DIR/bun.sh"
-    source "$SCRIPT_DIR/homebrew.sh"
-    source "$SCRIPT_DIR/apps.sh"
     source "$SCRIPT_DIR/uv.sh"
     source "$SCRIPT_DIR/fzf.sh"
     source "$SCRIPT_DIR/kubectl.sh"

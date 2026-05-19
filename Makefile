@@ -99,14 +99,16 @@ xcode: | $(DONE)
 # ─── Homebrew ─────────────────────────────────────────────────────────
 brew: xcode | $(DONE)
 	@$(APPEND_ZSHRC_FN) \
-	if ! command -v brew >/dev/null 2>&1; then \
+	if command -v brew >/dev/null 2>&1; then \
+		echo "Homebrew already installed at $$(command -v brew). Skipping."; \
+	else \
 		echo "Installing Homebrew..."; \
 		/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; \
 		append_zshrc '# Add Homebrew to PATH' true; \
 		append_zshrc 'eval "$$($(BREW_PREFIX)/bin/brew shellenv)"'; \
 		eval "$$($(BREW_PREFIX)/bin/brew shellenv)"; \
-	fi; \
-	brew update
+		brew update; \
+	fi
 	@touch $(DONE)/$@
 
 # ─── Cask & Formula apps ─────────────────────────────────────────────
@@ -123,13 +125,21 @@ BREW_FORMULAS := vim tmux node jq awscli kubectl krew sops fzf \
 apps: brew | $(DONE)
 	@echo "Installing cask apps..."
 	@for app in $(CASK_APPS); do \
-		echo "  -> $$app"; \
-		brew install --cask "$$app" 2>/dev/null || true; \
+		if brew list --cask "$${app##*/}" >/dev/null 2>&1; then \
+			echo "  -> $$app already installed, skipping."; \
+		else \
+			echo "  -> $$app"; \
+			brew install --cask "$$app" 2>/dev/null || true; \
+		fi; \
 	done
 	@echo "Installing brew formulas..."
 	@for formula in $(BREW_FORMULAS); do \
-		echo "  -> $$formula"; \
-		brew install "$$formula" 2>/dev/null || true; \
+		if brew list --formula "$${formula##*/}" >/dev/null 2>&1; then \
+			echo "  -> $$formula already installed, skipping."; \
+		else \
+			echo "  -> $$formula"; \
+			brew install "$$formula" 2>/dev/null || true; \
+		fi; \
 	done
 	@touch $(DONE)/$@
 
@@ -172,13 +182,14 @@ nvm: | $(DONE)
 	@touch $(DONE)/$@
 
 # ─── Bun ──────────────────────────────────────────────────────────────
-bun: | $(DONE)
+bun: brew | $(DONE)
 	@$(APPEND_ZSHRC_FN) \
-	if ! command -v bun >/dev/null 2>&1; then \
-		echo "Installing Bun..."; \
-		curl -fsSL https://bun.sh/install | bash; \
-	else \
+	if command -v bun >/dev/null 2>&1; then \
 		echo "Bun already installed."; \
+	else \
+		echo "Installing Bun via Homebrew (oven-sh/bun)..."; \
+		brew tap oven-sh/bun; \
+		brew install bun; \
 	fi; \
 	append_zshrc '# Bun configuration' true; \
 	append_zshrc 'export BUN_INSTALL="$$HOME/.bun"'; \

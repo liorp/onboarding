@@ -1,20 +1,5 @@
 #!/bin/bash
 
-install_codex() {
-    if ! command -v brew >/dev/null 2>&1; then
-        echo "Homebrew is required to install Codex. Run the brew step first." >&2
-        return 1
-    fi
-
-    if brew list --cask codex >/dev/null 2>&1; then
-        echo "Codex already installed. Skipping."
-        return 0
-    fi
-
-    echo "Installing Codex via Homebrew..."
-    brew install --cask codex
-}
-
 configure_codex() {
     echo "Configuring Codex..."
 
@@ -27,5 +12,4 @@ configure_codex() {
     cp "$config_source" "$config_target_dir/config.toml"
 }
 
-install_codex
 configure_codex

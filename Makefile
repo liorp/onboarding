@@ -100,7 +100,7 @@ starship: | $(DONE)
 	@bash $(SRC)/starship.sh
 	@touch $(DONE)/$@
 
-codex: brew | $(DONE)
+codex: | $(DONE)
 	@bash $(SRC)/codex.sh
 	@touch $(DONE)/$@
 

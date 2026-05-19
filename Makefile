@@ -120,7 +120,8 @@ CASK_APPS := brave-browser cursor codex figma slack postman \
 
 BREW_FORMULAS := vim tmux node jq awscli kubectl krew sops fzf \
                  starship helm gh glab ollama shellcheck \
-                 zsh-autosuggestions zsh-syntax-highlighting uv pnpm
+                 zsh-autosuggestions zsh-syntax-highlighting uv pnpm \
+                 pulumi/tap/pulumi
 
 apps: brew | $(DONE)
 	@echo "Installing cask apps..."

@@ -50,6 +50,7 @@ install_apps() {
         zsh-syntax-highlighting
         uv
         pnpm
+        pulumi/tap/pulumi
     )
 
     if ! command -v brew >/dev/null 2>&1; then

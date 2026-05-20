@@ -58,6 +58,7 @@ install_apps() {
         pulumi/tap/pulumi
         oven-sh/bun/bun
         rtk
+        typescript-language-server
     )
 
     if ! command -v brew >/dev/null 2>&1; then

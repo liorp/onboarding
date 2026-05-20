@@ -12,10 +12,12 @@ enable_tap_to_click() {
 }
 
 enable_trackpad_app_expose() {
-    echo "Ensuring App Exposé gesture is enabled on trackpads..."
+    echo "Enabling App Exposé three-finger swipe down gesture..."
     defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerVertSwipeGesture -int 2
     defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerVertSwipeGesture -int 2
     defaults -currentHost write NSGlobalDomain com.apple.trackpad.threeFingerVertSwipeGesture -int 2
+    defaults write com.apple.dock showAppExposeGestureEnabled -bool true
+    killall Dock >/dev/null 2>&1 || true
 }
 
 sync_desktop_and_documents_to_icloud() {

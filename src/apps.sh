@@ -33,6 +33,7 @@ install_apps() {
         docker-desktop
         wispr-flow
         ollama-app
+        gcloud-cli
     )
 
     local -a brew_formulas=(

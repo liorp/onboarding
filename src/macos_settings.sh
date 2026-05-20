@@ -55,7 +55,7 @@ enable_night_shift_sunset_to_sunrise() {
     echo "Enabling Night Shift from sunset to sunrise..."
     defaults -currentHost write com.apple.CoreBrightness CBBlueReductionStatus -dict \
         BlueReductionEnabled -bool true \
-        BlueReductionMode -int 1 \
+        BlueReductionMode -int 2 \
         BlueReductionSunScheduleAllowed -bool true \
         AutoBlueReductionEnabled -bool true
 }

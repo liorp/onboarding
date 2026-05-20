@@ -3,7 +3,7 @@
 install_apps() {
     local -a cask_apps=(
         brave-browser
-        cursor
+        visual-studio-code
         codex
         claude-code@latest
         figma

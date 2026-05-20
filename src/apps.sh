@@ -30,6 +30,9 @@ install_apps() {
         whatsapp
         warp
         yazinsai/openoats/openoats
+        docker-desktop
+        wispr-flow
+        ollama-app
     )
 
     local -a brew_formulas=(

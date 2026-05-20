@@ -28,6 +28,7 @@ install_apps() {
         karabiner-elements
         notion
         whatsapp
+        warp
         yazinsai/openoats/openoats
     )
 

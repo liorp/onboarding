@@ -5,6 +5,7 @@ install_apps() {
         brave-browser
         visual-studio-code
         codex
+        codex-app
         claude-code@latest
         figma
         slack

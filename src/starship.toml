@@ -44,8 +44,9 @@ format='[\[$hash$tag\]]($style) '
 format = "[$symbol$context\\($namespace\\)]($style) "
 style = "bright-blue"
 disabled = false
-[kubernetes.context_aliases]
-"gke_.*_(?P<var_cluster>[\\w-]+)" = "$var_cluster"
+[[kubernetes.contexts]]
+context_pattern = "gke_.*_(?P<var_cluster>[\\w-]+)"
+context_alias = "$var_cluster"
 
 [pulumi]
 format = "[$symbol$stack]($style) "

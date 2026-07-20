@@ -44,6 +44,7 @@ install_apps() {
         node
         jq
         awscli
+        azure-cli
         kubectl
         krew
         sops

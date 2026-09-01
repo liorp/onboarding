@@ -1,6 +1,7 @@
 cask "brave-browser"
 cask "visual-studio-code"
 cask "codex"
+cask "cursor-cli"
 cask "codexbar"
 cask "claude-code@latest"
 cask "grok-build"

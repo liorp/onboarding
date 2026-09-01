@@ -27,6 +27,7 @@ mkdir -p "$DIST_DIR"
 
 cp -R "$SCRIPT_DIR/src" "$STAGE_DIR/src"
 cp "$SCRIPT_DIR/main.sh" "$STAGE_DIR/main.sh"
+cp "$SCRIPT_DIR/Brewfile" "$STAGE_DIR/Brewfile"
 chmod +x "$STAGE_DIR/main.sh"
 
 echo "$VERSION" > "$STAGE_DIR/VERSION"

@@ -2,11 +2,17 @@ name: Release
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
 
 permissions:
   contents: write
+
+concurrency:
+  group: release
+  queue: max
 
 jobs:
   release:
@@ -16,21 +22,49 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Determine release version
+        id: version
+        run: |
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+              version="$GITHUB_REF_NAME"
+          else
+              git fetch --force --tags
+              version="$(git tag --points-at "$GITHUB_SHA" --format='%(refname:short)%09%(contents:subject)' | bash src/retry_version.sh "$GITHUB_RUN_ID")"
+              if [ -z "$version" ]; then
+                  latest="$(git tag --list | bash src/latest_version.sh)"
+                  version="$(bash src/next_version.sh "$latest")"
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  git tag -a "$version" -m "Automatic release run $GITHUB_RUN_ID"
+              fi
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
       - name: Install makeself
         run: sudo apt-get update && sudo apt-get install -y makeself
 
       - name: Build versioned artifact
-        run: bash build.sh "${GITHUB_REF_NAME}"
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: bash build.sh "$VERSION"
 
       - name: Generate checksum
         working-directory: dist
-        run: sha256sum "onboarding-${GITHUB_REF_NAME}.run" > "onboarding-${GITHUB_REF_NAME}.run.sha256"
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: sha256sum "onboarding-$VERSION.run" > "onboarding-$VERSION.run.sha256"
+
+      - name: Publish release tag
+        if: github.ref_type == 'branch'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: git push origin "refs/tags/$VERSION"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
+          name: ${{ steps.version.outputs.version }}
+          tag_name: ${{ steps.version.outputs.version }}
           files: |
             dist/onboarding-*.run
             dist/onboarding-*.sha256

@@ -29,13 +29,13 @@ jobs:
               version="$GITHUB_REF_NAME"
           else
               git fetch --force --tags
-              version="$(git tag --points-at "$GITHUB_SHA" | bash src/latest_version.sh)"
+              version="$(git tag --points-at "$GITHUB_SHA" --format='%(refname:short)%09%(contents:subject)' | bash src/retry_version.sh "$GITHUB_RUN_ID")"
               if [ -z "$version" ]; then
                   latest="$(git tag --list | bash src/latest_version.sh)"
                   version="$(bash src/next_version.sh "$latest")"
                   git config user.name "github-actions[bot]"
                   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-                  git tag -a "$version" -m "Release $version"
+                  git tag -a "$version" -m "Automatic release run $GITHUB_RUN_ID"
               fi
           fi
           echo "version=$version" >> "$GITHUB_OUTPUT"

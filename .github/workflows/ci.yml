@@ -18,12 +18,19 @@ jobs:
       - name: Syntax check
         run: |
           set -e
-          for f in main.sh build.sh src/*.sh; do
+          for f in main.sh build.sh src/*.sh tests/*.sh; do
               bash -n "$f"
           done
 
       - name: Shellcheck
-        run: shellcheck main.sh build.sh src/*.sh
+        run: shellcheck main.sh build.sh src/*.sh tests/*.sh
+
+      - name: Integration tests
+        run: |
+          set -e
+          for test_file in tests/*_test.sh; do
+              bash "$test_file"
+          done
 
   build:
     runs-on: ubuntu-latest

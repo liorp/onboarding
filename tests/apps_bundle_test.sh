@@ -42,6 +42,20 @@ if grep -Eq 'cask "(codex-app|chatgpt-atlas)"' "$brewfile"; then
     echo "Brewfile still includes a deprecated app" >&2
     exit 1
 fi
+
+expected_casks=33
+actual_casks="$(grep -c '^cask ' "$brewfile")"
+if [ "$actual_casks" -ne "$expected_casks" ]; then
+    echo "expected $expected_casks casks, found $actual_casks" >&2
+    exit 1
+fi
+
+expected_formulas=24
+actual_formulas="$(grep -c '^brew ' "$brewfile")"
+if [ "$actual_formulas" -ne "$expected_formulas" ]; then
+    echo "expected $expected_formulas formulas, found $actual_formulas" >&2
+    exit 1
+fi
 EOF
 chmod +x "$TEST_DIR/bin/brew"
 

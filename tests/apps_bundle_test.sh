@@ -38,13 +38,14 @@ fi
 
 grep -Fx 'cask "grok-build"' "$brewfile" >/dev/null
 grep -Fx 'cask "cursor-cli"' "$brewfile" >/dev/null
+grep -Fx 'cask "time-out"' "$brewfile" >/dev/null
 
 if grep -Eq 'cask "(codex-app|chatgpt-atlas)"' "$brewfile"; then
     echo "Brewfile still includes a deprecated app" >&2
     exit 1
 fi
 
-expected_casks=34
+expected_casks=35
 actual_casks="$(grep -c '^cask ' "$brewfile")"
 if [ "$actual_casks" -ne "$expected_casks" ]; then
     echo "expected $expected_casks casks, found $actual_casks" >&2

@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: release
-  cancel-in-progress: false
+  queue: max
 
 jobs:
   release:
@@ -29,12 +29,14 @@ jobs:
               version="$GITHUB_REF_NAME"
           else
               git fetch --force --tags
-              latest="$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' --sort=-version:refname | head -n 1)"
-              version="$(bash src/next_version.sh "$latest")"
-              git config user.name "github-actions[bot]"
-              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-              git tag -a "$version" -m "Release $version"
-              git push origin "$version"
+              version="$(git tag --points-at "$GITHUB_SHA" | bash src/latest_version.sh)"
+              if [ -z "$version" ]; then
+                  latest="$(git tag --list | bash src/latest_version.sh)"
+                  version="$(bash src/next_version.sh "$latest")"
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  git tag -a "$version" -m "Release $version"
+              fi
           fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
@@ -42,13 +44,21 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y makeself
 
       - name: Build versioned artifact
-        run: bash build.sh "${{ steps.version.outputs.version }}"
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: bash build.sh "$VERSION"
 
       - name: Generate checksum
         working-directory: dist
-        run: |
-          version="${{ steps.version.outputs.version }}"
-          sha256sum "onboarding-$version.run" > "onboarding-$version.run.sha256"
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: sha256sum "onboarding-$VERSION.run" > "onboarding-$VERSION.run.sha256"
+
+      - name: Publish release tag
+        if: github.ref_type == 'branch'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: git push origin "refs/tags/$VERSION"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

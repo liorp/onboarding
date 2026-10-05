@@ -19,6 +19,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=src/macos_settings.sh
 # shellcheck source=src/vscode.sh
 # shellcheck source=src/uv.sh
+# shellcheck source=src/cf.sh
 
 # Make all scripts executable
 echo "Making all scripts executable..."
@@ -42,6 +43,7 @@ usage() {
     echo "  -m, --manual        Run manual apps installation"
     echo "  -v, --vscode        Configure VS Code settings"
     echo "  -U, --uv            Run uv setup"
+    echo "  -C, --cf            Install Cloudflare CLI (cf)"
     echo "  -t, --macos-settings Apply macOS system settings"
     echo "  -h, --help          Display this help message"
     exit 1
@@ -58,7 +60,7 @@ else
 fi
 
 # Parse command line arguments
-while getopts "aonbpfkscrvyUmth-:" opt; do
+while getopts "aonbpfkscrvyUmthC-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -76,6 +78,7 @@ while getopts "aonbpfkscrvyUmth-:" opt; do
                 manual) source "$SCRIPT_DIR/manual_apps.sh" ;;
                 vscode) source "$SCRIPT_DIR/vscode.sh" ;;
                 uv) source "$SCRIPT_DIR/uv.sh" ;;
+                cf) source "$SCRIPT_DIR/cf.sh" ;;
                 macos-settings) source "$SCRIPT_DIR/macos_settings.sh" ;;
                 help) usage ;;
                 *) echo "Invalid option: --${OPTARG}" >&2; usage ;;
@@ -94,6 +97,7 @@ while getopts "aonbpfkscrvyUmth-:" opt; do
         m) source "$SCRIPT_DIR/manual_apps.sh" ;;
         v) source "$SCRIPT_DIR/vscode.sh" ;;
         U) source "$SCRIPT_DIR/uv.sh" ;;
+        C) source "$SCRIPT_DIR/cf.sh" ;;
         t) source "$SCRIPT_DIR/macos_settings.sh" ;;
         h) usage ;;
         \?) echo "Invalid option: -$OPTARG" >&2; usage ;;
@@ -107,6 +111,7 @@ if [ "$RUN_ALL" = true ]; then
     source "$SCRIPT_DIR/apps.sh"
     source "$SCRIPT_DIR/omz.sh"
     source "$SCRIPT_DIR/nvm.sh"
+    source "$SCRIPT_DIR/cf.sh"
     source "$SCRIPT_DIR/uv.sh"
     source "$SCRIPT_DIR/fzf.sh"
     source "$SCRIPT_DIR/kubectl.sh"

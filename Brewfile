@@ -37,6 +37,7 @@ cask "gcloud-cli"
 
 brew "vim"
 brew "tmux"
+brew "herdr"
 brew "node"
 brew "jq"
 brew "awscli"

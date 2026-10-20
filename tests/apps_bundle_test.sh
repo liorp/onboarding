@@ -40,6 +40,7 @@ grep -Fx 'cask "grok-build"' "$brewfile" >/dev/null
 grep -Fx 'cask "cursor-cli"' "$brewfile" >/dev/null
 grep -Fx 'cask "conductor"' "$brewfile" >/dev/null
 grep -Fx 'cask "time-out"' "$brewfile" >/dev/null
+grep -Fx 'cask "obs"' "$brewfile" >/dev/null
 grep -Fx 'brew "herdr"' "$brewfile" >/dev/null
 
 if grep -Eq 'cask "(codex-app|chatgpt-atlas)"' "$brewfile"; then
@@ -47,7 +48,7 @@ if grep -Eq 'cask "(codex-app|chatgpt-atlas)"' "$brewfile"; then
     exit 1
 fi
 
-expected_casks=36
+expected_casks=37
 actual_casks="$(grep -c '^cask ' "$brewfile")"
 if [ "$actual_casks" -ne "$expected_casks" ]; then
     echo "expected $expected_casks casks, found $actual_casks" >&2

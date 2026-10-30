@@ -38,6 +38,7 @@ cask "ollama-app"
 cask "gcloud-cli"
 
 brew "vim"
+brew "coreutils"
 brew "tmux"
 brew "herdr"
 brew "hf"

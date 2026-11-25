@@ -6,8 +6,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/zshrc_helpers.sh"
 
 install_pyenv() {
-    echo "Installing pyenv..."
-    curl -fsSL https://pyenv.run | bash
+    if [ -d "$HOME/.pyenv" ]; then
+        echo "pyenv already installed at $HOME/.pyenv. Skipping installation."
+    else
+        echo "Installing pyenv..."
+        curl -fsSL https://pyenv.run | bash
+    fi
     append_zshrc_line "# Pyenv configuration" true
     append_zshrc_line 'export PYENV_ROOT="$HOME/.pyenv"'
     append_zshrc_line '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"'

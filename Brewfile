@@ -73,3 +73,4 @@ brew "mas"
 
 # Mac App Store apps (requires being signed in to the App Store).
 mas "Xcode", id: 497799835
+mas "Amphetamine", id: 937984704

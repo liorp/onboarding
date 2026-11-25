@@ -53,6 +53,8 @@ grep -Fx 'brew "hf"' "$brewfile" >/dev/null
 grep -Fx 'brew "coreutils"' "$brewfile" >/dev/null
 grep -Fx 'cask "whatsapp"' "$brewfile" >/dev/null
 grep -Fx 'cask "telegram"' "$brewfile" >/dev/null
+grep -Fx 'cask "chatgpt"' "$brewfile" >/dev/null
+grep -Fx 'cask "claude"' "$brewfile" >/dev/null
 grep -Fx 'brew "mas"' "$brewfile" >/dev/null
 grep -Fx 'mas "Xcode", id: 497799835' "$brewfile" >/dev/null
 # azure-cli moved from homebrew/core to a cask.
@@ -68,7 +70,7 @@ if grep -Eq 'cask "(codex-app|chatgpt-atlas)"' "$brewfile"; then
     exit 1
 fi
 
-expected_casks=40
+expected_casks=41
 actual_casks="$(grep -c '^cask ' "$brewfile")"
 if [ "$actual_casks" -ne "$expected_casks" ]; then
     echo "expected $expected_casks casks, found $actual_casks" >&2

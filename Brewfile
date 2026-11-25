@@ -1,3 +1,6 @@
+# OpenOats moved its cask into the app repo; the old homebrew-openoats tap is gone.
+tap "yazinsai/openoats", "https://github.com/yazinsai/OpenOats"
+
 cask "brave-browser"
 cask "visual-studio-code"
 cask "codex"
@@ -36,6 +39,7 @@ cask "docker-desktop"
 cask "wispr-flow"
 cask "ollama-app"
 cask "gcloud-cli"
+cask "azure-cli"
 
 brew "vim"
 brew "coreutils"
@@ -45,7 +49,6 @@ brew "hf"
 brew "node"
 brew "jq"
 brew "awscli"
-brew "azure-cli"
 brew "kubectl"
 brew "krew"
 brew "sops"
@@ -64,3 +67,7 @@ brew "pulumi/tap/pulumi"
 brew "oven-sh/bun/bun"
 brew "rtk"
 brew "typescript-language-server"
+brew "mas"
+
+# Mac App Store apps (requires being signed in to the App Store).
+mas "Xcode", id: 497799835

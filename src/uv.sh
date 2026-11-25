@@ -27,6 +27,14 @@ update_uv_shell() {
     fi
 
     echo "Ensuring uv tool executables are available on PATH..."
+    # `uv tool update-shell` exits non-zero when the zsh files already add the
+    # dir, so skip it in that case.
+    local bin_dir
+    bin_dir="$(uv tool dir --bin)"
+    if grep -qsF "$bin_dir" "${ZDOTDIR:-$HOME}/.zshenv" "${ZDOTDIR:-$HOME}/.zshrc" "$HOME/.zprofile"; then
+        echo "uv tool directory $bin_dir is already on PATH in your zsh config."
+        return 0
+    fi
     uv tool update-shell
 }
 

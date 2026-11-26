@@ -20,6 +20,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=src/vscode.sh
 # shellcheck source=src/uv.sh
 # shellcheck source=src/cf.sh
+# shellcheck source=src/aliases.sh
 
 # Make all scripts executable
 echo "Making all scripts executable..."
@@ -44,6 +45,7 @@ usage() {
     echo "  -v, --vscode        Configure VS Code settings"
     echo "  -U, --uv            Run uv setup"
     echo "  -C, --cf            Install Cloudflare CLI (cf)"
+    echo "  -A, --aliases       Add AI CLI aliases (c, co, cu, g)"
     echo "  -t, --macos-settings Apply macOS system settings"
     echo "  -h, --help          Display this help message"
     exit 1
@@ -51,6 +53,14 @@ usage() {
 
 # Install dev tools before doing anything else
 source "$SCRIPT_DIR/xcode.sh"
+
+# Run one step, remembering it if it fails so the run can report it at the end
+# instead of claiming success.
+FAILED_STEPS=()
+run_step() {
+    # shellcheck disable=SC1090
+    source "$SCRIPT_DIR/$1.sh" || FAILED_STEPS+=("$1")
+}
 
 # Default to running all if no arguments provided
 if [ $# -eq 0 ]; then
@@ -60,45 +70,47 @@ else
 fi
 
 # Parse command line arguments
-while getopts "aonbpfkscrvyUmthC-:" opt; do
+while getopts "aonbpfkscrvyUmthCA-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
                 all) RUN_ALL=true ;;
-                omz) source "$SCRIPT_DIR/omz.sh" ;;
-                nvm) source "$SCRIPT_DIR/nvm.sh" ;;
-                brew) source "$SCRIPT_DIR/homebrew.sh" ;;
-                apps) source "$SCRIPT_DIR/apps.sh" ;;
-                fzf) source "$SCRIPT_DIR/fzf.sh" ;;
-                kubectl) source "$SCRIPT_DIR/kubectl.sh" ;;
-                starship) source "$SCRIPT_DIR/starship.sh" ;;
-                codex) source "$SCRIPT_DIR/codex.sh" ;;
-                projects) source "$SCRIPT_DIR/projects.sh" ;;
-                pyenv) source "$SCRIPT_DIR/pyenv.sh" ;;
-                manual) source "$SCRIPT_DIR/manual_apps.sh" ;;
-                vscode) source "$SCRIPT_DIR/vscode.sh" ;;
-                uv) source "$SCRIPT_DIR/uv.sh" ;;
-                cf) source "$SCRIPT_DIR/cf.sh" ;;
-                macos-settings) source "$SCRIPT_DIR/macos_settings.sh" ;;
+                omz) run_step omz ;;
+                nvm) run_step nvm ;;
+                brew) run_step homebrew ;;
+                apps) run_step apps ;;
+                fzf) run_step fzf ;;
+                kubectl) run_step kubectl ;;
+                starship) run_step starship ;;
+                codex) run_step codex ;;
+                projects) run_step projects ;;
+                pyenv) run_step pyenv ;;
+                manual) run_step manual_apps ;;
+                vscode) run_step vscode ;;
+                uv) run_step uv ;;
+                cf) run_step cf ;;
+                aliases) run_step aliases ;;
+                macos-settings) run_step macos_settings ;;
                 help) usage ;;
                 *) echo "Invalid option: --${OPTARG}" >&2; usage ;;
             esac ;;
         a) RUN_ALL=true ;;
-        o) source "$SCRIPT_DIR/omz.sh" ;;
-        n) source "$SCRIPT_DIR/nvm.sh" ;;
-        b) source "$SCRIPT_DIR/homebrew.sh" ;;
-        p) source "$SCRIPT_DIR/apps.sh" ;;
-        f) source "$SCRIPT_DIR/fzf.sh" ;;
-        k) source "$SCRIPT_DIR/kubectl.sh" ;;
-        s) source "$SCRIPT_DIR/starship.sh" ;;
-        c) source "$SCRIPT_DIR/codex.sh" ;;
-        r) source "$SCRIPT_DIR/projects.sh" ;;
-        y) source "$SCRIPT_DIR/pyenv.sh" ;;
-        m) source "$SCRIPT_DIR/manual_apps.sh" ;;
-        v) source "$SCRIPT_DIR/vscode.sh" ;;
-        U) source "$SCRIPT_DIR/uv.sh" ;;
-        C) source "$SCRIPT_DIR/cf.sh" ;;
-        t) source "$SCRIPT_DIR/macos_settings.sh" ;;
+        o) run_step omz ;;
+        n) run_step nvm ;;
+        b) run_step homebrew ;;
+        p) run_step apps ;;
+        f) run_step fzf ;;
+        k) run_step kubectl ;;
+        s) run_step starship ;;
+        c) run_step codex ;;
+        r) run_step projects ;;
+        y) run_step pyenv ;;
+        m) run_step manual_apps ;;
+        v) run_step vscode ;;
+        U) run_step uv ;;
+        C) run_step cf ;;
+        A) run_step aliases ;;
+        t) run_step macos_settings ;;
         h) usage ;;
         \?) echo "Invalid option: -$OPTARG" >&2; usage ;;
     esac
@@ -107,20 +119,32 @@ done
 # Run all configurations if specified
 if [ "$RUN_ALL" = true ]; then
     echo "Running all configurations..."
-    source "$SCRIPT_DIR/homebrew.sh"
-    source "$SCRIPT_DIR/apps.sh"
-    source "$SCRIPT_DIR/omz.sh"
-    source "$SCRIPT_DIR/nvm.sh"
-    source "$SCRIPT_DIR/cf.sh"
-    source "$SCRIPT_DIR/uv.sh"
-    source "$SCRIPT_DIR/fzf.sh"
-    source "$SCRIPT_DIR/kubectl.sh"
-    source "$SCRIPT_DIR/starship.sh"
-    source "$SCRIPT_DIR/codex.sh"
-    source "$SCRIPT_DIR/projects.sh"
-    source "$SCRIPT_DIR/pyenv.sh"
-    source "$SCRIPT_DIR/manual_apps.sh"
-    source "$SCRIPT_DIR/vscode.sh"
-    source "$SCRIPT_DIR/macos_settings.sh"
+    run_step homebrew
+    run_step apps
+    run_step omz
+    run_step nvm
+    run_step cf
+    run_step uv
+    run_step fzf
+    run_step kubectl
+    run_step aliases
+    run_step starship
+    run_step codex
+    run_step projects
+    run_step pyenv
+    run_step manual_apps
+    run_step vscode
+    run_step macos_settings
+fi
+
+if [ "${#FAILED_STEPS[@]}" -gt 0 ]; then
+    echo "" >&2
+    echo "Onboarding finished with failures in these steps:" >&2
+    printf '  - %s\n' "${FAILED_STEPS[@]}" >&2
+    echo "Scroll up for details, fix them, then re-run just those steps." >&2
+    exit 1
+fi
+
+if [ "$RUN_ALL" = true ]; then
     echo "All applications installed or opened for manual installation."
 fi 

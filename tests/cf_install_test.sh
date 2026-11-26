@@ -57,7 +57,7 @@ if [ "$(cat "$BUN_ARGS_FILE")" != "add --global cf" ]; then
     exit 1
 fi
 
-if ! grep -q 'source "$SCRIPT_DIR/cf.sh"' "$REPO_ROOT/src/init.sh"; then
+if ! grep -qx '    run_step cf' "$REPO_ROOT/src/init.sh"; then
     echo "init.sh does not run the Cloudflare CLI step" >&2
     exit 1
 fi

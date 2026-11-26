@@ -70,7 +70,9 @@ if grep -Eq 'cask "(codex-app|chatgpt-atlas)"' "$brewfile"; then
     exit 1
 fi
 
-expected_casks=41
+grep -Fx 'cask "microsoft-teams"' "$brewfile" >/dev/null
+grep -Fx 'cask "meetily"' "$brewfile" >/dev/null
+expected_casks=43
 actual_casks="$(grep -c '^cask ' "$brewfile")"
 if [ "$actual_casks" -ne "$expected_casks" ]; then
     echo "expected $expected_casks casks, found $actual_casks" >&2

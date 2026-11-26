@@ -19,7 +19,7 @@ chmod +x "$TEST_DIR/bin/open"
 
 export OPEN_LOG="$TEST_DIR/open.log"
 APPLICATIONS_DIR="$TEST_DIR/Applications" PATH="$TEST_DIR/bin:/usr/bin:/bin" \
-    bash "$REPO_ROOT/src/manual_apps.sh" >/dev/null
+    bash "$REPO_ROOT/src/manual_apps.sh" >/dev/null </dev/null
 
 if ! grep -Fxq 'macappstore://apps.apple.com/app/id937984704' "$OPEN_LOG"; then
     echo "expected the missing Amphetamine store page to open" >&2
@@ -29,6 +29,29 @@ fi
 
 if grep -Fq 'id497799835' "$OPEN_LOG"; then
     echo "must not open the store page for an installed app (Xcode)" >&2
+    exit 1
+fi
+
+# Amphetamine missing and no terminal: never block waiting, never launch it.
+if grep -Fq 'Amphetamine.app' "$OPEN_LOG"; then
+    echo "must not launch an app that is not installed" >&2
+    exit 1
+fi
+
+# Installed and marked for launch: Amphetamine is launched, Xcode is not.
+mkdir -p "$TEST_DIR/Applications/Amphetamine.app"
+: > "$OPEN_LOG"
+APPLICATIONS_DIR="$TEST_DIR/Applications" PATH="$TEST_DIR/bin:/usr/bin:/bin" \
+    bash "$REPO_ROOT/src/manual_apps.sh" >/dev/null </dev/null
+
+if ! grep -Fxq -- "-a $TEST_DIR/Applications/Amphetamine.app" "$OPEN_LOG"; then
+    echo "expected installed Amphetamine to be launched" >&2
+    cat "$OPEN_LOG" >&2
+    exit 1
+fi
+if grep -Fq -e 'Xcode.app' -e 'macappstore' "$OPEN_LOG"; then
+    echo "must not launch Xcode or open store pages for installed apps" >&2
+    cat "$OPEN_LOG" >&2
     exit 1
 fi
 

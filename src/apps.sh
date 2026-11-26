@@ -88,6 +88,19 @@ finish_xcode_setup() {
     echo "  sudo \"$xcodebuild\" -runFirstLaunch" >&2
 }
 
+# Menu bar apps that do nothing until launched once; start them right away.
+LAUNCH_AFTER_INSTALL="Maccy CodexBar"
+
+launch_installed_apps() {
+    local apps_dir="${APPLICATIONS_DIR:-/Applications}" app
+    for app in $LAUNCH_AFTER_INSTALL; do
+        if [ -d "$apps_dir/$app.app" ]; then
+            echo "Launching $app..."
+            open -a "$apps_dir/$app.app" || echo "WARNING: could not launch $app." >&2
+        fi
+    done
+}
+
 install_apps() {
     local script_dir
     script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -127,6 +140,7 @@ install_apps() {
     brew bundle --file="$filtered" || status=$?
     rm -f "$filtered"
     finish_xcode_setup
+    launch_installed_apps
 
     if [ "${#skipped[@]}" -gt 0 ]; then
         echo "" >&2

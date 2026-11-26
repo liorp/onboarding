@@ -20,6 +20,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=src/vscode.sh
 # shellcheck source=src/uv.sh
 # shellcheck source=src/cf.sh
+# shellcheck source=src/aliases.sh
 
 # Make all scripts executable
 echo "Making all scripts executable..."
@@ -44,6 +45,7 @@ usage() {
     echo "  -v, --vscode        Configure VS Code settings"
     echo "  -U, --uv            Run uv setup"
     echo "  -C, --cf            Install Cloudflare CLI (cf)"
+    echo "  -A, --aliases       Add AI CLI aliases (c, co, cu, g)"
     echo "  -t, --macos-settings Apply macOS system settings"
     echo "  -h, --help          Display this help message"
     exit 1
@@ -68,7 +70,7 @@ else
 fi
 
 # Parse command line arguments
-while getopts "aonbpfkscrvyUmthC-:" opt; do
+while getopts "aonbpfkscrvyUmthCA-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -87,6 +89,7 @@ while getopts "aonbpfkscrvyUmthC-:" opt; do
                 vscode) run_step vscode ;;
                 uv) run_step uv ;;
                 cf) run_step cf ;;
+                aliases) run_step aliases ;;
                 macos-settings) run_step macos_settings ;;
                 help) usage ;;
                 *) echo "Invalid option: --${OPTARG}" >&2; usage ;;
@@ -106,6 +109,7 @@ while getopts "aonbpfkscrvyUmthC-:" opt; do
         v) run_step vscode ;;
         U) run_step uv ;;
         C) run_step cf ;;
+        A) run_step aliases ;;
         t) run_step macos_settings ;;
         h) usage ;;
         \?) echo "Invalid option: -$OPTARG" >&2; usage ;;
@@ -123,6 +127,7 @@ if [ "$RUN_ALL" = true ]; then
     run_step uv
     run_step fzf
     run_step kubectl
+    run_step aliases
     run_step starship
     run_step codex
     run_step projects

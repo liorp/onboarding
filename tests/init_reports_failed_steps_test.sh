@@ -14,7 +14,7 @@ cp "$REPO_ROOT/src/init.sh" "$TEST_DIR/src/init.sh"
 
 # Stub every step: apps fails, the rest log that they ran.
 echo 'true' > "$TEST_DIR/src/xcode.sh"
-for step in homebrew omz nvm cf uv fzf kubectl starship codex projects pyenv manual_apps vscode macos_settings; do
+for step in aliases homebrew omz nvm cf uv fzf kubectl starship codex projects pyenv manual_apps vscode macos_settings; do
     echo "echo ran-$step" > "$TEST_DIR/src/$step.sh"
 done
 echo 'echo ran-apps; false' > "$TEST_DIR/src/apps.sh"

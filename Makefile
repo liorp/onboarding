@@ -19,9 +19,9 @@ SRC         := src
 
 # ─── Phony targets ───────────────────────────────────────────────────
 .PHONY: all clean help xcode brew apps omz nvm cf uv pyenv fzf \
-        kubectl starship codex projects vscode manual-apps macos-settings
+        kubectl aliases starship codex projects vscode manual-apps macos-settings
 
-all: xcode brew apps omz nvm cf uv pyenv fzf kubectl starship codex \
+all: xcode brew apps omz nvm cf uv pyenv fzf kubectl aliases starship codex \
      projects vscode manual-apps macos-settings
 	@echo ""
 	@echo "All onboarding steps complete."
@@ -40,6 +40,7 @@ help:
 	@echo "  pyenv           Install pyenv"
 	@echo "  fzf             Configure fzf + starship shell init"
 	@echo "  kubectl         Install krew plugins + aliases"
+	@echo "  aliases         Add AI CLI aliases (c, co, cu, g)"
 	@echo "  starship        Deploy starship.toml config"
 	@echo "  codex           Install Codex + deploy config.toml"
 	@echo "  projects        Create ~/projects directory"
@@ -94,6 +95,10 @@ fzf: brew apps | $(DONE)
 
 kubectl: brew apps | $(DONE)
 	@bash $(SRC)/kubectl.sh
+	@touch $(DONE)/$@
+
+aliases: | $(DONE)
+	@bash $(SRC)/aliases.sh
 	@touch $(DONE)/$@
 
 starship: | $(DONE)

@@ -99,6 +99,16 @@ exit 0
 EOF
 chmod +x "$TEST_DIR/bin/git"
 
+# Menu bar apps are launched once installed; only those, never others.
+mkdir -p "$TEST_DIR/Applications/Maccy.app" "$TEST_DIR/Applications/CodexBar.app" \
+    "$TEST_DIR/Applications/Slack.app"
+cat > "$TEST_DIR/bin/open" <<'EOF'
+#!/bin/bash
+printf '%s\n' "$*" >> "$OPEN_LOG"
+EOF
+chmod +x "$TEST_DIR/bin/open"
+
+OPEN_LOG="$TEST_DIR/open.log" APPLICATIONS_DIR="$TEST_DIR/Applications" \
 FAKE_BREW_REPO="$TEST_DIR/brew-repo" \
 BREW_TAP_LOG="$TEST_DIR/tap.log" \
 BREW_TRUST_LOG="$TEST_DIR/trust.log" \
@@ -110,6 +120,14 @@ if [ "$(wc -l < "$TEST_DIR/brew-args" | tr -d ' ')" -ne 2 ]; then
     echo "expected: brew bundle --file=<path>" >&2
     echo "actual arguments:" >&2
     cat "$TEST_DIR/brew-args" >&2
+    exit 1
+fi
+
+expected_open="-a $TEST_DIR/Applications/Maccy.app
+-a $TEST_DIR/Applications/CodexBar.app"
+if [ "$(cat "$TEST_DIR/open.log")" != "$expected_open" ]; then
+    echo "expected Maccy and CodexBar to be launched, got:" >&2
+    cat "$TEST_DIR/open.log" >&2
     exit 1
 fi
 

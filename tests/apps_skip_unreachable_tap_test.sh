@@ -51,7 +51,7 @@ chmod +x "$TEST_DIR/bin/brew" "$TEST_DIR/bin/git"
 
 status=0
 FAKE_BREW_REPO="$TEST_DIR/brew-repo" BUNDLED_FILE="$TEST_DIR/bundled" GIT_LOG="$TEST_DIR/git.log" TRUST_LOG="$TEST_DIR/trust.log" \
-XCODE_APP="$TEST_DIR/no-xcode" PATH="$TEST_DIR/bin:/usr/bin:/bin" \
+APPLICATIONS_DIR="$TEST_DIR/no-apps" XCODE_APP="$TEST_DIR/no-xcode" PATH="$TEST_DIR/bin:/usr/bin:/bin" \
     bash "$TEST_DIR/pkg/src/apps.sh" 2> "$TEST_DIR/stderr" || status=$?
 
 fail() { echo "FAIL: $*" >&2; cat "$TEST_DIR/stderr" >&2; exit 1; }

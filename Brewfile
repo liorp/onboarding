@@ -71,8 +71,7 @@ brew "pulumi/tap/pulumi"
 brew "oven-sh/bun/bun"
 brew "rtk"
 brew "typescript-language-server"
-brew "mas"
 
-# Mac App Store apps (requires being signed in to the App Store).
-mas "Xcode", id: 497799835
-mas "Amphetamine", id: 937984704
+# Mac App Store apps (Xcode, Amphetamine) are not installed here: `mas`
+# installs them silently under sudo and the App Store then asks for your
+# Apple ID over and over. src/manual_apps.sh opens their store pages instead.

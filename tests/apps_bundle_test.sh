@@ -55,8 +55,12 @@ grep -Fx 'cask "whatsapp"' "$brewfile" >/dev/null
 grep -Fx 'cask "telegram"' "$brewfile" >/dev/null
 grep -Fx 'cask "chatgpt"' "$brewfile" >/dev/null
 grep -Fx 'cask "claude"' "$brewfile" >/dev/null
-grep -Fx 'brew "mas"' "$brewfile" >/dev/null
-grep -Fx 'mas "Xcode", id: 497799835' "$brewfile" >/dev/null
+# App Store apps go through manual_apps.sh; mas prompts for the Apple ID
+# endlessly from a background process.
+if grep -Eq '^(mas |brew "mas")' "$brewfile"; then
+    echo "Brewfile must not install Mac App Store apps via mas" >&2
+    exit 1
+fi
 # azure-cli moved from homebrew/core to a cask.
 grep -Fx 'cask "azure-cli"' "$brewfile" >/dev/null
 if grep -Fxq 'brew "azure-cli"' "$brewfile"; then
@@ -79,7 +83,7 @@ if [ "$actual_casks" -ne "$expected_casks" ]; then
     exit 1
 fi
 
-expected_formulas=27
+expected_formulas=26
 actual_formulas="$(grep -c '^brew ' "$brewfile")"
 if [ "$actual_formulas" -ne "$expected_formulas" ]; then
     echo "expected $expected_formulas formulas, found $actual_formulas" >&2

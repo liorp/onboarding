@@ -31,4 +31,6 @@ if ! tar -tf "$artifact" | grep -Fx './Brewfile' >/dev/null; then
     exit 1
 fi
 
+tar -xOf "$artifact" ./Brewfile | grep -Fx 'brew "supabase"' >/dev/null
+
 echo "build Brewfile test passed"
